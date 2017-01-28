@@ -25,15 +25,14 @@ dev-down:
 circleci-dependencies: common-build
 
 circleci-pre-test:
-	true
+	docker network create eg_net
+	docker run -d --name es-guidebook --network=eg_net -p 9200:9200 elasticsearch:5.1.2
 
 circleci-test:
-	make dev-up
-	sleep 5
-	make dev-testing
+	docker run --rm --network=eg_net au9ustine/es-guidebook:dev nosetests -s
 
 circleci-post-test:
-	make dev-down
+	docker rm -f es-guidebook
 
 circleci-deployment:
 	true

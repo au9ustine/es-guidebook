@@ -10,7 +10,6 @@ COPY requirements.txt /var/eg
 
 RUN \
   pip install -r requirements.txt && \
-  pip install -U docker-compose && \
   pip install -U nose && \
   rm -rf /var/tmp/* /tmp/* /var/lib/apt/lists/*
 
