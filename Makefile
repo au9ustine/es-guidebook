@@ -27,9 +27,10 @@ circleci-dependencies: common-build
 
 circleci-pre-test:
 	docker run -d --name es-guidebook -p 9200:9200 elasticsearch:5.1.2
+	sleep 10
 
 circleci-test:
-	curl -vvv http://0.0.0.0:9200/
+	curl --retry 10 --retrydelay 5 http://localhost:9200/
 
 circleci-deployment:
 	true
