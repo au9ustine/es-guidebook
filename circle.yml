@@ -13,8 +13,6 @@ test:
     - make circleci-pre-test
   override:
     - make circleci-test
-  post:
-    - make circleci-post-test
 
 deployment:
   docker-upload:
