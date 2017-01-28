@@ -1,0 +1,23 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  cache_directories:
+    - "~/docker-cache/"
+  override:
+    - make circleci-dependencies
+
+test:
+  pre:
+    - make circleci-pre-test
+  override:
+    - make circleci-test
+  post:
+    - make circleci-post-test
+
+deployment:
+  docker-upload:
+    branch: /.*/
+    commands:
+      - make circleci-deployment

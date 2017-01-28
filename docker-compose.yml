@@ -1,0 +1,7 @@
+version: '2'
+services:
+  es-guidebook:
+    image: elasticsearch:5.1.2
+    container_name: es-guidebook
+    ports:
+      - "9200:9200"
