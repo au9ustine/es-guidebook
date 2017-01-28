@@ -29,7 +29,7 @@ circleci-pre-test:
 	docker run -d --name es-guidebook -p 9200:9200 elasticsearch:5.1.2
 
 circleci-test:
-	docker run --rm au9ustine/es-guidebook:latest nosetests -s
+	curl -vvv http://localhost:9200/
 
 circleci-deployment:
 	true
