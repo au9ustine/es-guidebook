@@ -8,14 +8,11 @@ common-build:
 	docker build -t $(DOCKER_IMAGE_NAME):latest -f docker/Dockerfile .
 
 # Development
-dev-build: common-build
+dev-build: dev-down common-build
 	docker tag $(DOCKER_IMAGE_NAME):latest $(DOCKER_IMAGE_NAME):dev
 
-dive-in: dev-build
-	docker run --rm -it $(DOCKER_IMAGE_NAME):dev bash
-
-dev-test:
-	docker run --rm $(DOCKER_IMAGE_NAME):dev nosetest -s
+dev-testing:
+	docker run --rm --network=eg_default $(DOCKER_IMAGE_NAME):dev nosetests -s
 
 dev-up:
 	docker-compose -p eg up -d
@@ -31,7 +28,9 @@ circleci-pre-test:
 	true
 
 circleci-test:
-	make dev-up dev-test
+	make dev-up
+	sleep 5
+	make dev-testing
 
 circleci-post-test:
 	make dev-down
