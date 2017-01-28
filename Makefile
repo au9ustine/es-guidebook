@@ -30,7 +30,7 @@ circleci-pre-test:
 	sleep 10
 
 circleci-test:
-	curl --retry 10 --retrydelay 5 http://localhost:9200/
+	curl --retry 10 --retry-delay 5 http://localhost:9200/
 
 circleci-deployment:
 	true
