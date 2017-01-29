@@ -1,9 +1,10 @@
+from elasticsearch import Elasticsearch
 import requests
-from time import sleep
-
-ES_LOCAL_ENDPOINT = 'es-guidebook:9200'
 
 def test_hello():
-    sleep(1)
-    res = requests.get('http://{0}/{1}'.format(ES_LOCAL_ENDPOINT, ''))
-    assert res.status_code == 200
+    es = Elasticsearch(['http://localhost:9200'])
+    print(es)
+
+def test_hello_req():
+    res = requests.get('http://localhost:9200', json={})
+    print(res.json())

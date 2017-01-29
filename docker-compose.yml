@@ -1,7 +1,54 @@
 version: '2'
 services:
-  es-guidebook:
+  elasticsearch:
     image: elasticsearch:5.1.2
-    container_name: es-guidebook
+    container_name: eg-elasticsearch
     ports:
       - "9200:9200"
+      - "9300:9300"
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    mem_limit: 1g
+    cap_add:
+      - IPC_LOCK
+    networks:
+      - eg-net
+  # logstash exited
+  logstash:
+    image: logstash:5.1.2
+    container_name: eg-logstash
+    ports:
+      # Logstash - Main
+      - "5000:5000"
+      # Beats input -- https://www.elastic.co/guide/en/logstash/5.0/plugins-inputs-beats.html
+      - "5044:5044"
+      # UDP input -- https://www.elastic.co/guide/en/logstash/master/plugins-inputs-udp.html#plugins-inputs-udp-codec
+      - "43448:43448/udp"
+      # Monitoring APIs -- https://www.elastic.co/guide/en/logstash/5.0/monitoring.html
+      - "9600:9600"
+    links:
+      - elasticsearch
+    networks:
+      - eg-net
+  # I don't like to commit a registration for basic plan of xpack while official docker image has built based on xpack
+  kibana:
+    image: kibana:5.1.2
+    container_name: eg-kibana
+    ports:
+      - "5601:5601"
+    links:
+      - elasticsearch
+    networks:
+      - eg-net
+networks:
+  eg-net:
+    driver: bridge
